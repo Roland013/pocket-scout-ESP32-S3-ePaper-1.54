@@ -1,0 +1,32 @@
+# Build outputs
+*.bin
+*.elf
+*.map
+*.hex
+*.uf2
+*.lst
+*.o
+*.a
+*.d
+build/
+.pio/
+
+# Arduino local state
+*.ino.cpp
+*.partitions.bin
+*.bootloader.bin
+*.merged.bin
+
+# Private/local project files
+.claude/
+.codex/
+.vscode/
+docs/
+vendor/
+firmware/PocketCat/
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+*.swp
+*.tmp
