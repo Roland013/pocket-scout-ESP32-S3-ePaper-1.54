@@ -89,6 +89,30 @@ ButtonEvent readPwrButtonEvent() {
   return BTN_NONE;
 }
 
+/** Classify display touch as a short or long press while the device is awake. */
+ButtonEvent readTouchEvent() {
+  TouchPoint point = readTouch();
+  uint32_t now = millis();
+  if (point.ok) {
+    if (!touchDown) {
+      touchDown = true;
+      touchLongSent = false;
+      touchDownMs = now;
+    } else if (!touchLongSent && now - touchDownMs > 850) {
+      touchLongSent = true;
+      lastTouchEventMs = now;
+      return BTN_LONG;
+    }
+  } else if (touchDown) {
+    touchDown = false;
+    if (!touchLongSent && now - touchDownMs > 35 && now - lastTouchEventMs > 250) {
+      lastTouchEventMs = now;
+      return BTN_SHORT;
+    }
+  }
+  return BTN_NONE;
+}
+
 /** Handle a short BOOT press by moving to the next badge screen. */
 void cycleScreen() {
   blinkStatusLed(1, 40, 0);
@@ -258,6 +282,12 @@ void loop() {
   if (event == BTN_SHORT) {
     cycleScreen();
   } else if (event == BTN_LONG) {
+    handleAction();
+  }
+  ButtonEvent touchEvent = readTouchEvent();
+  if (touchEvent == BTN_SHORT) {
+    cycleScreen();
+  } else if (touchEvent == BTN_LONG) {
     handleAction();
   }
   if (readPwrButtonEvent() == BTN_LONG) {

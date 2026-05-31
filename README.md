@@ -13,6 +13,11 @@ Official hardware pages:
 - Wiki: <https://docs.waveshare.com/ESP32-S3-ePaper-1.54>
 - Waveshare demo repo: <https://github.com/waveshareteam/ESP32-S3-ePaper-1.54>
 
+## Hardware
+
+The retail board is the Waveshare ESP32-S3-ePaper-1.54. During upload it
+identifies as an ESP32-S3-PICO-1 with 8MB embedded flash and 8MB embedded PSRAM.
+
 ## Features
 
 - 200 x 200 e-paper UI for the ESP32-S3-ePaper-1.54.
@@ -23,6 +28,7 @@ Official hardware pages:
 - I2C scanner for onboard and connected devices.
 - Sensor log with date, time, temperature, relative humidity, and voltage.
 - GPIO pin reference.
+- Touchscreen navigation for page changes and page actions.
 - Deep sleep after idle for 2 minutes.
 - GP3 green LED blink feedback for wake, page changes, actions, and sleep.
 
@@ -30,10 +36,13 @@ Official hardware pages:
 
 - Short BOOT press: next page.
 - Long BOOT press: action for the current page.
+- Short touch on the display: next page.
+- Long touch on the display: action for the current page.
 - Long PWR press while awake: go to sleep.
 - Press PWR to wake from deep sleep.
 
-On pages with multiple result pages, long BOOT advances to the next result page.
+On pages with multiple result pages, long BOOT or a long display touch advances
+to the next result page.
 
 ## Safety
 

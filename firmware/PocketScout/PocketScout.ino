@@ -191,6 +191,10 @@ bool lastPwrButtonLevel = true;
 bool pwrButtonDown = false;
 bool pwrLongSent = false;
 uint32_t lastPwrButtonChangeMs = 0;
+bool touchDown = false;
+bool touchLongSent = false;
+uint32_t touchDownMs = 0;
+uint32_t lastTouchEventMs = 0;
 
 #include "hardware_base.inc"
 #include "sensors.inc"

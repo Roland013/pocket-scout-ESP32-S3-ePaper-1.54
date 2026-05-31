@@ -305,24 +305,26 @@ void renderBle(const RtcDateTime &dt, const Shtc3Reading &sht, float batt) {
     drawCentered(58, "NO BLE ADS", 2);
     drawText(28, 96, "HOLD BOOT TO RESCAN", 1);
   } else {
-    char line[32];
-    uint8_t pages = bleCount;
+    char line[42];
+    uint8_t pages = (bleCount + RADIO_RESULTS_PER_PAGE - 1) / RADIO_RESULTS_PER_PAGE;
     if (blePage >= pages) {
       blePage = 0;
     }
-    const BleEntry &entry = bleEntries[blePage];
-    snprintf(line, sizeof(line), "DEVICE %u/%u", blePage + 1, pages);
+    uint8_t start = blePage * RADIO_RESULTS_PER_PAGE;
+    uint8_t end = min((uint8_t)(start + RADIO_RESULTS_PER_PAGE), bleCount);
+    snprintf(line, sizeof(line), "P%u/%u  %d ADS", blePage + 1, pages, bleScanResult);
     drawText(10, 28, line, 1);
-    drawSignalBars(10, 50, entry.rssi);
-    snprintf(line, sizeof(line), "RSSI %ld", (long)entry.rssi);
-    drawText(34, 49, line, 2);
-    drawText(10, 72, entry.named ? "NAME" : "NO NAME", 1);
-    drawWrapped(10, 86, 180, entry.name, 1, 2);
-    drawText(10, 112, "SVC", 1);
-    drawWrapped(34, 112, 156, entry.hasService ? entry.serviceUuid : "NONE", 1, 2);
-    drawText(10, 138, "MFG", 1);
-    snprintf(line, sizeof(line), "%s", entry.hasManufacturer ? entry.manufacturerId : "NONE");
-    drawText(34, 138, line, 1);
+    for (uint8_t i = start; i < end; i++) {
+      const BleEntry &entry = bleEntries[i];
+      int y = 47 + (i - start) * 24;
+      drawSignalBars(10, y + 2, entry.rssi);
+      snprintf(line, sizeof(line), "%4ld MFG %s", (long)entry.rssi, entry.hasManufacturer ? entry.manufacturerId : "NONE");
+      drawText(32, y, line, 1);
+      char name[18];
+      strncpy(name, entry.name, sizeof(name));
+      name[sizeof(name) - 1] = 0;
+      drawText(32, y + 10, name, 1);
+    }
     if (pages > 1) {
       drawText(10, 169, "LONG BOOT: NEXT", 1);
     }
@@ -374,9 +376,9 @@ void renderI2c(const RtcDateTime &dt, const Shtc3Reading &sht, float batt) {
     snprintf(line, sizeof(line), "%u DEVICES", i2cCount);
     drawText(10, 32, line, 2);
     for (uint8_t i = 0; i < i2cCount; i++) {
-      int y = 56 + i * 18;
+      int y = 54 + i * 14;
       snprintf(line, sizeof(line), "0X%02X  %s", i2cEntries[i].addr, i2cEntries[i].label);
-      drawText(18, y, line, 2);
+      drawText(18, y, line, 1);
     }
   }
   drawFooter(dt, sht);
