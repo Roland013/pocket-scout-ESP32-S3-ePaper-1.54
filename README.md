@@ -1,8 +1,8 @@
 # Pocket Scout ESP32-S3-ePaper-1.54
 
 Pocket Scout is Arduino firmware for the Waveshare ESP32-S3-ePaper-1.54. It turns
-the small e-paper board into a pocket electronics scout: home status, system
-stats, passive Wi-Fi and BLE scans, I2C discovery, sensor logging, GPIO pin
+the small e-paper board into a pocket electronics scout: system
+stats, passive Wi-Fi and BLE scans, internal I2C discovery, internal sensor logging, GPIO pin
 reference, low-power sleep, and status LED feedback.
 
 ![Waveshare ESP32-S3-ePaper-1.54](https://www.waveshare.com/img/devkit/ESP32-S3-ePaper-1.54/ESP32-S3-ePaper-1.54-details-1.jpg)
@@ -17,13 +17,13 @@ Official hardware pages:
 
 - 200 x 200 e-paper UI for the ESP32-S3-ePaper-1.54.
 - Home page with time, date, temperature, humidity, and battery voltage.
-- System page with free RAM, low RAM, sleep timeout, radio state, and sensors.
+- System page with free RAM, low RAM, sleep timeout, radio state, and internal sensors.
 - Passive Wi-Fi scanner showing SSID, RSSI, channel, and security.
 - Passive BLE scanner showing one advertisement per page.
 - I2C scanner for onboard devices.
 - Sensor log with date, time, temperature, relative humidity, and voltage.
 - GPIO pin reference.
-- Deep sleep after idle, plus a manual long-PWR sleep action while awake.
+- Deep sleep after idle for 2 minutes.
 - GP3 green LED blink feedback for wake, page changes, actions, and sleep.
 
 ## Controls
@@ -31,16 +31,16 @@ Official hardware pages:
 - Short BOOT press: next page.
 - Long BOOT press: action for the current page.
 - Long PWR press while awake: go to sleep.
-- Wake from deep sleep: press the wake button configured by the firmware.
+- Press PWR to wake from deep sleep.
 
 On pages with multiple result pages, long BOOT advances to the next result page.
 
 ## Safety
 
 The Wi-Fi page only performs normal scan-only discovery. It does not connect,
-capture traffic, collect credentials, deauthenticate clients, or attempt attacks.
+capture traffic, collect credentials or deauthenticate clients.
 
-The BLE page only scans advertisements. It does not connect to devices.
+The BLE page only scans advertisements. The firmware does not connect to devices.
 
 ## Repository Layout
 
@@ -57,11 +57,25 @@ firmware to compile:
 - `epaper_driver_bsp.h`
 - `epaper_driver_bsp.cpp`
 
-The full Waveshare example repository is not included.
+The full Waveshare example repository is not included, but can be found in the link above.
 
 ## Build With Arduino CLI
 
-Install Arduino CLI, then install the Espressif ESP32 board package:
+Install Arduino CLI, then install the Espressif ESP32 board package.
+
+### Windows PowerShell
+
+Install Arduino CLI with Winget:
+
+```powershell
+winget install ArduinoSA.CLI
+```
+
+Close and reopen PowerShell, then verify the install:
+
+```powershell
+arduino-cli version
+```
 
 ```powershell
 arduino-cli config init
@@ -70,17 +84,24 @@ arduino-cli core update-index
 arduino-cli core install esp32:esp32
 ```
 
+Compile the firmware from the repository root:
+
+```powershell
+arduino-cli compile --fqbn "esp32:esp32:esp32s3:CDCOnBoot=cdc,PartitionScheme=huge_app,PSRAM=opi,FlashMode=qio,FlashSize=4M,USBMode=hwcdc,UploadMode=default,UploadSpeed=921600,CPUFreq=240,DebugLevel=none,EraseFlash=none" firmware/PocketScout
+```
+
 List connected boards and ports:
 
 ```powershell
 arduino-cli board list
 ```
 
-Compile from the repository root:
+Find the upload port from the `Port` column. On Windows it usually looks like
+`COM3`, `COM8`, or similar.
 
-```powershell
-arduino-cli compile --fqbn "esp32:esp32:esp32s3:CDCOnBoot=cdc,PartitionScheme=huge_app,PSRAM=opi,FlashMode=qio,FlashSize=4M,USBMode=hwcdc,UploadMode=default,UploadSpeed=921600,CPUFreq=240,DebugLevel=none,EraseFlash=none" firmware/PocketScout
-```
+If multiple boards are connected, unplug the ESP32-S3-ePaper board, run the
+command once, plug it back in, and run it again. The new port is the one to use
+as `<PORT>` in the upload command.
 
 Upload, replacing `<PORT>` with your board's serial port:
 
@@ -88,8 +109,52 @@ Upload, replacing `<PORT>` with your board's serial port:
 arduino-cli upload -p <PORT> --fqbn "esp32:esp32:esp32s3:CDCOnBoot=cdc,PartitionScheme=huge_app,PSRAM=opi,FlashMode=qio,FlashSize=4M,USBMode=hwcdc,UploadMode=default,UploadSpeed=921600,CPUFreq=240,DebugLevel=none,EraseFlash=none" firmware/PocketScout
 ```
 
-Example port names are `COM3` on Windows, `/dev/ttyACM0` on Linux, or
-`/dev/cu.usbmodem*` on macOS.
+### Linux Bash
+
+Install Arduino CLI with the official install script:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh
+sudo install -m 0755 bin/arduino-cli /usr/local/bin/arduino-cli
+```
+
+Verify the install:
+
+```bash
+arduino-cli version
+```
+
+```bash
+arduino-cli config init
+arduino-cli config add board_manager.additional_urls https://espressif.github.io/arduino-esp32/package_esp32_index.json
+arduino-cli core update-index
+arduino-cli core install esp32:esp32
+```
+
+Compile from the repository root:
+
+```bash
+arduino-cli compile --fqbn "esp32:esp32:esp32s3:CDCOnBoot=cdc,PartitionScheme=huge_app,PSRAM=opi,FlashMode=qio,FlashSize=4M,USBMode=hwcdc,UploadMode=default,UploadSpeed=921600,CPUFreq=240,DebugLevel=none,EraseFlash=none" firmware/PocketScout
+```
+
+List connected boards and ports:
+
+```bash
+arduino-cli board list
+```
+
+Find the upload port from the `Port` column. On Linux it is often
+`/dev/ttyACM0` or `/dev/ttyUSB0`.
+
+If multiple boards are connected, unplug the ESP32-S3-ePaper board, run the
+command once, plug it back in, and run it again. The new port is the one to use
+as `<PORT>` in the upload command.
+
+Upload, replacing `<PORT>` with your board's serial port:
+
+```bash
+arduino-cli upload -p <PORT> --fqbn "esp32:esp32:esp32s3:CDCOnBoot=cdc,PartitionScheme=huge_app,PSRAM=opi,FlashMode=qio,FlashSize=4M,USBMode=hwcdc,UploadMode=default,UploadSpeed=921600,CPUFreq=240,DebugLevel=none,EraseFlash=none" firmware/PocketScout
+```
 
 Known working board options:
 
@@ -128,8 +193,9 @@ with the 4MB flash-size Arduino setting above.
    - Flash Size: 4MB
    - CPU Frequency: 240 MHz
    - Upload Speed: 921600
-8. Select the board's serial port.
-9. Use Verify to compile, then Upload.
+8. Use Verify to compile.
+9. Select the board's serial port.
+10. Use Upload.
 
 ## ESP-IDF
 
