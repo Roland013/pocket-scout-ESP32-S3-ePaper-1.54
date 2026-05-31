@@ -2,7 +2,7 @@
 
 Pocket Scout is Arduino firmware for the Waveshare ESP32-S3-ePaper-1.54. It turns
 the small e-paper board into a pocket electronics scout: system
-stats, passive Wi-Fi and BLE scans, internal I2C discovery, internal sensor logging, GPIO pin
+stats, passive Wi-Fi and BLE scans, I2C discovery, internal sensor logging, GPIO pin
 reference, low-power sleep, and status LED feedback.
 
 ![Waveshare ESP32-S3-ePaper-1.54](https://www.waveshare.com/img/devkit/ESP32-S3-ePaper-1.54/ESP32-S3-ePaper-1.54-details-1.jpg)
@@ -20,7 +20,7 @@ Official hardware pages:
 - System page with free RAM, low RAM, sleep timeout, radio state, and internal sensors.
 - Passive Wi-Fi scanner showing SSID, RSSI, channel, and security.
 - Passive BLE scanner showing one advertisement per page.
-- I2C scanner for onboard devices.
+- I2C scanner for onboard and connected devices.
 - Sensor log with date, time, temperature, relative humidity, and voltage.
 - GPIO pin reference.
 - Deep sleep after idle for 2 minutes.
@@ -131,7 +131,7 @@ arduino-cli core update-index
 arduino-cli core install esp32:esp32
 ```
 
-Compile from the repository root:
+Compile the Pocket Scout from the repository root:
 
 ```bash
 arduino-cli compile --fqbn "esp32:esp32:esp32s3:CDCOnBoot=cdc,PartitionScheme=huge_app,PSRAM=opi,FlashMode=qio,FlashSize=4M,USBMode=hwcdc,UploadMode=default,UploadSpeed=921600,CPUFreq=240,DebugLevel=none,EraseFlash=none" firmware/PocketScout
