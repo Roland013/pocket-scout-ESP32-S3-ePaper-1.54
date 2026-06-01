@@ -24,6 +24,7 @@ build/
 docs/
 vendor/
 firmware/PocketCat/
+PocketCat-ESP32-S3-ePaper-1.54/
 
 # OS/editor noise
 .DS_Store
