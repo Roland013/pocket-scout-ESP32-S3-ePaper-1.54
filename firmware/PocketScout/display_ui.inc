@@ -286,7 +286,7 @@ void renderWifi(const RtcDateTime &dt, const Shtc3Reading &sht, float batt) {
       drawText(32, y + 10, ssid, 1);
     }
     if (pages > 1) {
-      drawText(10, 169, "LONG BOOT: NEXT", 1);
+      drawText(10, 169, "LONG PRESS: NEXT", 1);
     }
   }
   drawFooter(dt, sht);
@@ -326,7 +326,7 @@ void renderBle(const RtcDateTime &dt, const Shtc3Reading &sht, float batt) {
       drawText(32, y + 10, name, 1);
     }
     if (pages > 1) {
-      drawText(10, 169, "LONG BOOT: NEXT", 1);
+      drawText(10, 169, "LONG PRESS: NEXT", 1);
     }
   }
   drawFooter(dt, sht);
@@ -424,25 +424,25 @@ void renderGpio(const RtcDateTime &dt, const Shtc3Reading &sht, float batt) {
   snprintf(title, sizeof(title), "GPIO %u/%u", gpioPage + 1, GPIO_PAGE_COUNT);
   drawText(10, 32, title, 1);
   if (gpioPage == 0) {
-    drawText(10, 49, "IO0  BOOT WAKE INPUT", 1);
-    drawText(10, 66, "I2C  SDA47 SCL48", 1);
-    drawText(10, 83, "EPD  CS11 DC10 RST9", 1);
-    drawText(10, 100, "SPI  SCK12 MOSI13", 1);
-    drawText(10, 117, "EPD  BUSY8 PWR6", 1);
-    drawText(10, 134, "TOUCH INT21 RST7", 1);
-    drawText(10, 151, "BAT  ADC4 PWR17", 1);
-    drawText(10, 168, "AUDIO PWR42 PA46", 1);
+    drawText(10, 45, "IO0  BOOT WAKE INPUT", 1);
+    drawText(10, 60, "I2C  SDA47 SCL48", 1);
+    drawText(10, 75, "EPD  CS11 DC10 RST9", 1);
+    drawText(10, 90, "SPI  SCK12 MOSI13", 1);
+    drawText(10, 105, "EPD  BUSY8 PWR6", 1);
+    drawText(10, 120, "TOUCH INT21 RST7", 1);
+    drawText(10, 135, "BAT  ADC4 PWR17", 1);
+    drawText(10, 150, "AUDIO PWR42 PA46", 1);
   } else {
-    drawText(10, 49, "IO5  RTC INT", 1);
-    drawText(10, 66, "IO13 EPD MOSI", 1);
-    drawText(10, 83, "IO14 I2S MCLK", 1);
-    drawText(10, 100, "IO15 I2S BCLK", 1);
-    drawText(10, 117, "IO17 BAT CTRL", 1);
-    drawText(10, 134, "IO18 PWR KEY", 1);
-    drawText(10, 151, "IO38 I2S WS", 1);
-    drawText(10, 168, "IO45 DOUT IO46 PA", 1);
+    drawText(10, 45, "IO5  RTC INT", 1);
+    drawText(10, 60, "IO13 EPD MOSI", 1);
+    drawText(10, 75, "IO14 I2S MCLK", 1);
+    drawText(10, 90, "IO15 I2S BCLK", 1);
+    drawText(10, 105, "IO17 BAT CTRL", 1);
+    drawText(10, 120, "IO18 PWR KEY", 1);
+    drawText(10, 135, "IO38 I2S WS", 1);
+    drawText(10, 150, "IO45 DOUT IO46 PA", 1);
   }
-  drawText(10, 169, "LONG BOOT: NEXT", 1);
+  drawText(10, 169, "LONG PRESS: NEXT", 1);
   drawFooter(dt, sht);
 }
 

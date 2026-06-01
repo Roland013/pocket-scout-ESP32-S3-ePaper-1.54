@@ -1,6 +1,6 @@
 # Pocket Scout ESP32-S3-ePaper-1.54
 
-Pocket Scout is Arduino firmware for the Waveshare ESP32-S3-ePaper-1.54. It turns
+Pocket Scout is Arduino firmware for the Waveshare ESP32-S3-ePaper-1.54 with touchscreen. It turns
 the small e-paper board into a pocket electronics scout: system
 stats, passive Wi-Fi and BLE scans, I2C discovery, internal sensor logging, GPIO pin
 reference, low-power sleep, and status LED feedback.
